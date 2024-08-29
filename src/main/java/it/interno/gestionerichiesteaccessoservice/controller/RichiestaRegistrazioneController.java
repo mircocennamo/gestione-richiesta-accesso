@@ -58,7 +58,7 @@ public class RichiestaRegistrazioneController {
     @Operation(summary = "API l'inserimento di una nuova richiesta")
     @PostMapping
     public ResponseEntity<ResponseDto<RichiestaRegistrazioneDto>> inserimentoRichiesta(@RequestBody RichiestaRegistrazioneDto input){
-
+        //TODO aggiungere controllo coerenza codice fiscale (punto 2 della lista)
         RichiestaRegistrazioneDto result = richiestaRegistrazioneService.inserimentoRichiesta(input);
 
         return ResponseEntity.ok(ResponseDto.<RichiestaRegistrazioneDto>builder()
@@ -70,7 +70,7 @@ public class RichiestaRegistrazioneController {
     @Operation(summary = "API l'aggiornamento di una nuova richiesta")
     @PutMapping
     public ResponseEntity<ResponseDto<RichiestaRegistrazioneDto>> aggiornamentoRichiesta(@RequestBody RichiestaRegistrazioneDto input){
-
+    //TODO aggiungere controllo coerenza codice fiscale (punto 2 della lista)
         RichiestaRegistrazioneDto result = richiestaRegistrazioneService.aggiornamentoRichiesta(input);
 
         return ResponseEntity.ok(ResponseDto.<RichiestaRegistrazioneDto>builder()

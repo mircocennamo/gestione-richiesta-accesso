@@ -1,9 +1,8 @@
 package it.interno.gestionerichiesteaccessoservice.service;
 
 import it.interno.gestionerichiesteaccessoservice.client.OimClient;
-import it.interno.gestionerichiesteaccessoservice.dto.DatiPrepopolamentoDto;
-import it.interno.gestionerichiesteaccessoservice.dto.OrarioLavoroDto;
-import it.interno.gestionerichiesteaccessoservice.dto.RichiestaRegistrazioneDto;
+import it.interno.gestionerichiesteaccessoservice.client.PersonaFisicaClient;
+import it.interno.gestionerichiesteaccessoservice.dto.*;
 import it.interno.gestionerichiesteaccessoservice.dto.filtro.RicercaRichiestaFiltroDto;
 import it.interno.gestionerichiesteaccessoservice.dto.oim.UtenteOimDto;
 import it.interno.gestionerichiesteaccessoservice.entity.*;
@@ -15,6 +14,7 @@ import it.interno.gestionerichiesteaccessoservice.utils.GenericUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,6 +55,9 @@ public class RichiestaRegistrazioneServiceImpl implements RichiestaRegistrazione
     private OimClient oimClient;
     @Autowired
     private ForzaPoliziaRepository forzaPoliziaRepository;
+
+    @Autowired
+    private PersonaFisicaClient personaFisicaClient;
 
     @Override
     public String getNextProtocollo() {
@@ -107,10 +110,28 @@ public class RichiestaRegistrazioneServiceImpl implements RichiestaRegistrazione
         return richiestaRegistrazioneMapper.toDto(richiesta);
     }
 
+    private PersonaFisicaDto convert(RichiestaRegistrazioneDto richiestaRegistrazioneDto){
+        PersonaFisicaDto personaFisicaDto = new PersonaFisicaDto();
+        personaFisicaDto.setCodiceFiscale(richiestaRegistrazioneDto.getCodiceFiscale());
+        personaFisicaDto.setCognome(richiestaRegistrazioneDto.getCognome());
+        personaFisicaDto.setNome(richiestaRegistrazioneDto.getNome());
+        personaFisicaDto.setDataNascita(richiestaRegistrazioneDto.getDataNascita());
+        personaFisicaDto.setSesso(String.valueOf(richiestaRegistrazioneDto.getSesso()));
+        personaFisicaDto.setCodiceLuogoNascita(richiestaRegistrazioneDto.getCodiceLuogoNascita());
+
+
+        return personaFisicaDto;
+    }
+
     @Override
     @Transactional
     public RichiestaRegistrazioneDto inserimentoRichiesta(RichiestaRegistrazioneDto input) {
 
+        //invoco persone fisiche per validazione Codice fiscale bug numero 2
+        ResponseEntity<ResponseDto<Boolean>> verificaCF = personaFisicaClient.verificaCodiceFiscale(convert(input));
+        if(verificaCF.getBody().getBody() == null || !verificaCF.getBody().getBody()){
+            throw new CodiceFiscaleNonValidoException("Il codice fiscale inserito non è valido.");
+        }
         RichiestaRegistrazione richiesta = richiestaRegistrazioneMapper.toEntity(input);
 
         try{
@@ -142,6 +163,12 @@ public class RichiestaRegistrazioneServiceImpl implements RichiestaRegistrazione
     @Override
     @Transactional
     public RichiestaRegistrazioneDto aggiornamentoRichiesta(RichiestaRegistrazioneDto input) {
+
+        //invoco persone fisiche per validazione Codice fiscale bug numero 2
+        ResponseEntity<ResponseDto<Boolean>> verificaCF = personaFisicaClient.verificaCodiceFiscale(convert(input));
+        if(verificaCF.getBody().getBody() == null || !verificaCF.getBody().getBody()){
+            throw new CodiceFiscaleNonValidoException("Il codice fiscale inserito non è valido.");
+        }
 
         RichiestaRegistrazione suDb = richiestaRegistrazioneRepository.getRichiestaByProtocollo(input.getIdProtocollo());
 

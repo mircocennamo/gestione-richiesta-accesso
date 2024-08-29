@@ -47,4 +47,5 @@ public class RichiestaRegistrazioneDto {
     private ForzaPoliziaDto forzaPolizia;
     private MotivazioneRifiutoDto motivazioneRifiuto;
     private StatoRichiestaDto statoRichiesta;
+    private Integer codiceLuogoNascita;
 }

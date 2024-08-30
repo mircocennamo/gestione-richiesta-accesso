@@ -70,6 +70,9 @@ public interface GenericUtils {
         String meseNascita = codiceFiscale.substring(8, 9);
         Mese mese = Mese.fromValue(meseNascita);
         Integer giornoNascita = Integer.parseInt(codiceFiscale.substring(9, 11));
+        //se è donna sottraiamo 40 al giorno di nascita
+        if(giornoNascita > 40)
+            giornoNascita -= 40;
         LocalDate localDate = LocalDate.of(annoNascita, mese.getMese(), giornoNascita);
        return maggiorenne(localDate, LocalDate.now());
     }

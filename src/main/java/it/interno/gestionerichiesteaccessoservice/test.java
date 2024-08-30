@@ -12,7 +12,7 @@ import org.springframework.boot.SpringApplication;
 public class test {
 
     public static void main(String[] args) {
-       String codiceFiscale = "CNNMRC06T30H703M";
+       String codiceFiscale = "MRDFNC22A41C352W";
         if(StringUtils.isBlank(codiceFiscale))
             throw new CodiceFiscaleNonValidoException("Il codice fiscale inserito non è valido.");
         if(!GenericUtils.isMaggiorenne(codiceFiscale))

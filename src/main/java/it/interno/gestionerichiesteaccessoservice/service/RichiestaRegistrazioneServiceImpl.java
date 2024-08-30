@@ -6,6 +6,7 @@ import it.interno.gestionerichiesteaccessoservice.dto.*;
 import it.interno.gestionerichiesteaccessoservice.dto.filtro.RicercaRichiestaFiltroDto;
 import it.interno.gestionerichiesteaccessoservice.dto.oim.UtenteOimDto;
 import it.interno.gestionerichiesteaccessoservice.entity.*;
+import it.interno.gestionerichiesteaccessoservice.enumeration.Ripartizione;
 import it.interno.gestionerichiesteaccessoservice.exceptions.*;
 import it.interno.gestionerichiesteaccessoservice.mapper.RichiestaRegistrazioneMapper;
 import it.interno.gestionerichiesteaccessoservice.repository.*;
@@ -253,6 +254,9 @@ public class RichiestaRegistrazioneServiceImpl implements RichiestaRegistrazione
 
             // Creazione User
             Luogo luogo = luogoRepository.getByDescrizioneAndInLuogo(richiesta.getLuogoNascita(), new String[]{"01", "04"}, richiesta.getDataNascita());
+            Luogo regioneNascita = luogoRepository.getByDescrizioneRegione(luogo.getCodiceRegione(), new String[]{"02"}, richiesta.getDataNascita());
+            Luogo provinciaNascita = luogoRepository.getByDescrizioneProvincia(luogo.getCodiceProvincia(), new String[]{"03"}, richiesta.getDataNascita());
+
 
             utenteDaCreare = new Users(
                     codiceUtente,
@@ -280,7 +284,10 @@ public class RichiestaRegistrazioneServiceImpl implements RichiestaRegistrazione
                     richiesta.getQualifica().getIdQualifica(),
                     idFunzione,
                     new Luogo(luogo.getCodiceLuogo()),
-                    note
+                    note,
+                    regioneNascita.getDescrizioneLuogo(),
+                    provinciaNascita.getDescrizioneLuogo(),
+                    Ripartizione.fromCodiceRegione(regioneNascita.getCodiceRegione()).getRipartizione()
             );
 
             utenteDaCreare = usersRepository.save(utenteDaCreare);

@@ -76,11 +76,21 @@ public class Users {
     @Column(name = "NOTEUTENTE")
     private String noteUtente;
 
+   //fix bug numero 98
+    @Column(name = "REGIONE")
+    private String regione;
+    @Column(name = "PROVINCIA")
+    private String provincia;
+    @Column(name = "RIPARTIZIONE")
+    private String ripartizione;
+
+
     @ManyToOne
     @JoinColumn(name = "CODICELUOGODINASCITA", referencedColumnName = "CODICELUOGO")
     private Luogo codiceLuogoNascita;
 
-    public Users(String codiceUtente, String codiceUfficio, Integer forzaPolizia, String codiceRegione, String codiceProvincia, String nome, String cognome, LocalDate dataNascita, Character sesso, String luogoNascita, String codiceFiscale, String email, String telefono, String prefissoTelefono, String emailPrivata, String utenteInserimento, String ufficioInserimento, Timestamp dataInserimento, Integer emailPrimaria, String siglaProvinciaNacita, Integer idTipoUtente, String paeseDiNascita, Integer idQualifica, String idFunzione, Luogo codiceLuogoNascita, String noteUtente) {
+    public Users(String codiceUtente, String codiceUfficio, Integer forzaPolizia, String codiceRegione, String codiceProvincia, String nome, String cognome, LocalDate dataNascita, Character sesso, String luogoNascita, String codiceFiscale, String email, String telefono, String prefissoTelefono, String emailPrivata, String utenteInserimento, String ufficioInserimento, Timestamp dataInserimento, Integer emailPrimaria, String siglaProvinciaNacita, Integer idTipoUtente, String paeseDiNascita, Integer idQualifica, String idFunzione, Luogo codiceLuogoNascita, String noteUtente
+    ,String regione ,String provincia ,String ripartizione ) {
         this.codiceUtente = codiceUtente;
         this.codiceUfficio = codiceUfficio;
         this.forzaPolizia = forzaPolizia;
@@ -107,5 +117,8 @@ public class Users {
         this.codiceLuogoNascita = codiceLuogoNascita;
         this.noteUtente = noteUtente;
         this.prefissoTelefono = prefissoTelefono;
+        this.regione = regione;
+        this.provincia = provincia;
+        this.ripartizione = ripartizione;
     }
 }

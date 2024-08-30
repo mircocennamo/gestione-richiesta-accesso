@@ -25,4 +25,21 @@ public interface LuogoRepository extends JpaRepository<Luogo, Integer> {
             "AND l.tsCancellazione IS NULL")
     Luogo getByDescrizioneAndInLuogo(String descrizione, String[] inLuogo, LocalDate dataRif);
 
+
+    @Query("FROM Luogo l " +
+            "WHERE TRIM(l.codiceRegione) = ?1 " +
+            "AND ?3 >= l.dataInizioValidita " +
+            "AND (?3 <= l.dataFineValidita OR l.dataFineValidita IS NULL) " +
+            "AND l.inLuogo IN ?2 " +
+            "AND l.tsCancellazione IS NULL")
+    Luogo getByDescrizioneRegione(String codiceRegione, String[] inLuogo, LocalDate dataRif);
+
+    @Query("FROM Luogo l " +
+            "WHERE TRIM(l.codiceProvincia) = ?1 " +
+            "AND ?3 >= l.dataInizioValidita " +
+            "AND (?3 <= l.dataFineValidita OR l.dataFineValidita IS NULL) " +
+            "AND l.inLuogo IN ?2 " +
+            "AND l.tsCancellazione IS NULL")
+    Luogo getByDescrizioneProvincia(String codiceProvincia, String[] inLuogo, LocalDate dataRif);
+
 }

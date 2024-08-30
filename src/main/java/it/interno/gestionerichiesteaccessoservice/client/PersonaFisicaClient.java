@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "personefisiche-service", path = "/codice-fiscale")
+@FeignClient(name = "personefisiche-service", path = "/codice-fiscale", url = "${interno.personefisiche.url}")
 public interface PersonaFisicaClient {
 
     @PostMapping(path = "/verifica")
